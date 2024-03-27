@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h1 style="color: darkorange; text-align: center;">Books</h1>
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse: collapse; border: 1px solid #ddd;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Title</th>
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Authors</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td style="padding: 12px; border: 1px solid #ddd; max-width: 300px; overflow: hidden; text-overflow: ellipsis;">{{ book.title }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ book.authors }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

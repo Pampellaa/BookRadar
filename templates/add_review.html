@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <h2 style="text-align: center">Add Review</h2>
+  <form method="post" id="reviewForm" style="text-align: center; width: 400px; margin: auto" >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+  </form>
+  <script>
+      $('#id_author').change(function(){
+        var authorId = $(this).val();
+
+        $.ajax({
+          url: '/add-opinion',
+          data: {'author_id': authorId},
+          success: function(data){
+              console.log("odp", data)
+            // Clear previous options
+            $('#id_title').empty();
+            // Populate title options
+            $.each(data, function(index, book) {
+              $('#id_title').append('<option value="' + book.id + '">' + book.title + '</option>');
+            });
+          }
+        });
+      });
+  </script>
+{% endblock %}

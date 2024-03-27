@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Book Radar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Charmonman:400,700|Open+Sans:400,600,700&amp;subset=latin-ext"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header class="page-header" style="background-color: white">
+        <nav class="navbar navbar-expand-lg justify-content-around">
+            <a href="{% url 'index' %}" class="btn navbar-brand main-logo">
+                <span style="color: darkorange;">Book</span> <span style="color: cadetblue">Radar</span>
+            </a>
+
+            {% if user.is_authenticated %}
+                <p style="color: darkorange">Hello {{ user.username }} !</p>
+                <a href="{% url 'add-opinion' %}" style="color: cadetblue">Add new opinion</a>
+                <ul class="nav nounderline text-uppercase">
+                    <li class="nav-item ml-4">
+                        <a class="nav-link color-header" href="{% url 'logout' %}">log out</a>
+                    </li>
+                </ul>
+            {% else %}
+                <p style="color: darkorange">Log in to fully use the application</p>
+                <ul class="nav nounderline text-uppercase">
+                    <li class="nav-item ml-4">
+                        <a class="nav-link color-header" href="{% url 'login' %}">log in</a>
+                    </li>
+                    <li class="nav-item ml-4">
+                        <a class="nav-link color-header" href="{% url 'register' %}">sign in</a>
+                    </li>
+                </ul>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% block content %}
+    <section class="padding-large bg-light" style="background: url('{% static 'images/back.jpg' %}') center/cover fixed no-repeat; background-size: cover;">
+      <div id="carouselExampleControls" class="carousel slide main-slider" data-ride="carousel">
+        <div class="carousel-inner container">
+          {% for book in carousel_books %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="carousel-caption d-block" style="background: rgba(255, 255, 255, 0.8); border-radius: 35px; padding: 20px; font-family: Pagul">
+              <h1 style="font-size: 2.5em; margin-bottom: 10px;">{{ book.title }}</h1>
+              <p style="font-size: 1.5em; margin-bottom: 5px;">{{ book.author }}</p>
+              <p style="font-size: 1.2em;">Ranking: {{ book.ranking }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </section>
+
+
+
+    <section class="section-more padding-small">
+        <div class="container">
+            <h2 class="pb-3" style="color: cadetblue">Ranking of the Best Books</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Ranking</th>
+                                <th>Title</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in best_books|slice:":5" %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ book.ranking }}</td>
+                                    <td>{{ book.title }}</td>
+                                    <td>
+                                        <button class="btn" style="background-color: cadetblue">
+                                            <a href="#" style="color: white">Details</a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Ranking</th>
+                                <th>Title</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in best_books|slice:"6:" %}
+                                <tr>
+                                    <td>{{ forloop.counter0|add:6 }}</td>
+                                    <td>{{ book.ranking }}</td>
+                                    <td>{{ book.title }}</td>
+                                    <td>
+                                        <button class="btn" style="background-color: cadetblue">
+                                            <a href="#" style="color: white">Details</a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="padding-small details bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="text-center">
+                        <img src="{% static 'images/opinion.jpg' %}" class="img-fluid" alt="Book Opinion Image">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-center text-md-left mt-4">
+                        <h2 class="font-weight-bold mb-3">Share Your Reading Experience</h2>
+                        <p>Read something interesting lately?</p>
+                        <p>We'd love to hear your thoughts!</p>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'add-opinion' %}" class="btn" style="background-color: darkorange; color: white">Add Your Opinion</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn" style="background-color: darkorange; color: white">Add Your Opinion</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-section padding-small">
+        <div class="container" style="color: black">
+            <h2 class="font-weight-bold mb-4" style="color: darkorange">Latest Opinions</h2>
+            <ul class="list-unstyled">
+                {% for review in reviews %}
+                    <li class="mb-3" style="background-color: white">
+                        <span class="font-weight-bold" style="color: cadetblue">{{ review.user.username }}</span>
+                        on
+                        <span class="font-italic">{{ review.book.title }}</span>:
+                        <br>
+                        "{{ review.comment }}"
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+        
+    <section class="padding-small details bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="text-center">
+                        <img src="{% static 'images/genre2.jpg' %}" class="img-fluid genre-image" alt="Book Genre Image">
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="text-center text-md-left mt-4 ">
+                        <h2 class="font-weight-bold mb-3 text-center">Discover books by genre</h2>
+                        <ul class="book-types-list center" style="color: whitesmoke">
+                            {% for type in types %}
+                            <li>
+                                {% if user.is_authenticated %}
+                                    <a href="/type/{{ type.0 }}" style="color: darkorange">{{ type.1 }}</a>
+                                {% else %}
+                                    <a href="{% url 'login' %}"  style="color: darkorange">{{ type.1 }}</a>
+                                {% endif %}
+                                
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <form method="GET" action="{% url 'books' %}">
+        <section class="newsletter-section padding-small">
+            <div class="container" style="color: black">
+                <h2 style="color: darkorange">Find book</h2>
+                    <div class="input-group mb-3">
+                        <input type="text" name="search_query" class="form-control border-0 rounded-0" placeholder="Search for a book"
+                            aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2">Find</button>
+                        </div>
+                    </div>
+            </div>
+        </section> 
+    </form>
+     
+        
+<section class="last-info-section padding-small" id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 class="mb-4">Skontaktuj się z nami!</h3>
+                <p>Pracownicy Centrum Obsługi Klienta chętnie udzielą odpowiedzi na Twoje pytania!</p>
+            </div>
+            <div class="col pl-4 ml-4">
+                <h3 class="mb-4">Formy kontaktu</h3>
+                <ul class="container">
+                    <li>Jesteśmy dostępni od poniedziałku do piątku</li>
+                    <li>Pracujemy w godzinach 9:00-17:00</li>
+                    <li>Numer telefonu: +48 123 456 789</li>
+                </ul>
+            </div>
+            <div class="col">
+                <h3 class="mb-4">Zapisz się do naszego newslettera</h3>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control border-0 rounded-0" placeholder=""
+                        aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2"><a
+                                href="index.html">Zapisz się</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    {% endblock %}
+</body>
+</html>
