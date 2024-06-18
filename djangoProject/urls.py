@@ -25,6 +25,7 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('add-opinion/', views.AddOpinionView.as_view(), name='add-opinion'),
+    path('add-review/', views.Add_review.as_view(), name='add-review'),
     path('type/<int:book_type>/', views.BookTypeView.as_view(), name='type'),
     path('books/', views.fetch_books, name='books'),
     ]

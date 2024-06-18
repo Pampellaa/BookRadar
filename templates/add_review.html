@@ -2,28 +2,54 @@
 
 {% block content %}
   <h2 style="text-align: center">Add Review</h2>
-  <form method="post" id="reviewForm" style="text-align: center; width: 400px; margin: auto" >
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-  </form>
+  <div id="authorInput" style="text-align: center; width: 400px; margin: auto">
+    <form id="authorForm">
+      {% csrf_token %}
+      <label for="id_author">Find author:</label>
+      <input type="text" id="id_author" class="author" name="author" placeholder="Enter author's name">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <div id="bookList" style="text-align: center; width: 400px; margin: auto; display:none;">
+    {% if books %}
+      <h3>Found Books:</h3>
+      <ul>
+        {% for book in books %}
+          <li>{{ book.title }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No books found</p>
+    {% endif %}
+  </div>
+
   <script>
-      $('#id_author').change(function(){
-        var authorId = $(this).val();
+    $(document).ready(function() {
+      $('#authorForm').submit(function(event){
+        event.preventDefault();
+        var author = $('#id_author').val();
 
         $.ajax({
           url: '/add-opinion',
-          data: {'author_id': authorId},
+          method: 'GET',
+          data: {'author': author},
           success: function(data){
-              console.log("odp", data)
-            // Clear previous options
-            $('#id_title').empty();
-            // Populate title options
-            $.each(data, function(index, book) {
-              $('#id_title').append('<option value="' + book.id + '">' + book.title + '</option>');
-            });
+            console.log("Response", data);
+            if (data.books.length > 0) {
+              var bookList = '<h3 style="text-align: center">Found Books:</h3><ul>';
+              $.each(data.books, function(index, book) {
+                bookList += '<li>' + book.title + ' - ' + book.authors + '</li>';
+              });
+              bookList += '</ul>';
+              $('#bookList').html(bookList).show();
+              $('#authorInput').hide();
+            } else {
+              $('#bookList').html('<p>No books found</p>').show();
+            }
           }
         });
       });
+    });
   </script>
 {% endblock %}

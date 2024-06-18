@@ -8,13 +8,38 @@
                 <tr style="background-color: #f2f2f2;">
                     <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Title</th>
                     <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Authors</th>
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Ranking</th>
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Add review</th>
                 </tr>
             </thead>
             <tbody>
                 {% for book in books %}
                 <tr>
-                    <td style="padding: 12px; border: 1px solid #ddd; max-width: 300px; overflow: hidden; text-overflow: ellipsis;">{{ book.title }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd; max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
+                        <a href=''>{{ book.title }}</a>
+                    </td>
                     <td style="padding: 12px; border: 1px solid #ddd;">{{ book.authors }}</td>
+                    <td>
+                        {% if book.average_rating %}
+                            {{ book.average_rating }}
+                        {% else %}
+                            No ratings yet
+                        {% endif %}
+                    </td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">
+                        <form method="post" action="{% url 'add-review' %}?search_query={{ search_query }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="title" value="{{ book.title }}">
+                            <input type="hidden" name="authors" value="{{ book.authors }}">
+                            <input type="hidden" name="publisher" value="{{ book.publisher }}">
+                            <input type="hidden" name="year" value="{{ book.year }}">
+                            <label for="rating">Rating:</label>
+                            <input type="number" name="rating" min="1" max="10" step="1" required>
+                            <label for="comment">Comment:</label>
+                            <textarea name="comment" required></textarea>
+                            <input type="submit" value="Add Review">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -56,7 +56,7 @@
             <div class="carousel-caption d-block" style="background: rgba(255, 255, 255, 0.8); border-radius: 35px; padding: 20px; font-family: Pagul">
               <h1 style="font-size: 2.5em; margin-bottom: 10px;">{{ book.title }}</h1>
               <p style="font-size: 1.5em; margin-bottom: 5px;">{{ book.author }}</p>
-              <p style="font-size: 1.2em;">Ranking: {{ book.ranking }}</p>
+              <p style="font-size: 1.2em;">Ranking: {{ book.average_rating }}</p>
             </div>
           </div>
           {% endfor %}
@@ -92,7 +92,7 @@
                             {% for book in best_books|slice:":5" %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ book.ranking }}</td>
+                                    <td>{{ book.average_rating }}</td>
                                     <td>{{ book.title }}</td>
                                     <td>
                                         <button class="btn" style="background-color: cadetblue">
